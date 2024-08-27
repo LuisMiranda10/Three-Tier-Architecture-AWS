@@ -10,8 +10,8 @@ output "subnets-private-id" {
   value = module.network.private_subnet_ids
 }
 
-output "nat-gateway-id" {
-  value = module.network.nat_gateway_ids
+output "subsnet-secure-id" {
+  value = module.network.secure_subnet_ids
 }
 
 output "internet-gateway-id" {
