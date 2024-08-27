@@ -6,7 +6,6 @@ module "network" {
   name                          = "MyVPC"
   multi_nat                     = false
   max_az                        = 2
-  nat                           = false
   vpc_endpoint_s3_gateway       = false
   vpc_endpoint_dynamodb_gateway = false
 }

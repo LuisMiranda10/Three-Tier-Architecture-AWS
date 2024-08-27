@@ -1,11 +1,10 @@
 resource "aws_autoscaling_group" "three-tier-web-asg" {
   name                 = "three-tier-web-asg"
-  launch_configuration = aws_launch_configuration.three-tier-web-config
-  vpc_zone_identifier  = [module.network.subnets-public-id]
+  launch_configuration = aws_launch_configuration.three-tier-web-config.id
+  vpc_zone_identifier  = [module.network.public_subnet_ids[0].id, module.network.public_subnet_ids[1].id]
   min_size             = 2
   max_size             = 3
   desired_capacity     = 2
-  health_check_type = "ELB"
 }
 
 resource "aws_launch_configuration" "three-tier-web-config" {
@@ -13,7 +12,7 @@ resource "aws_launch_configuration" "three-tier-web-config" {
     image_id                    = "ami-0b3a4110c36b9a5f0"
     instance_type               = "t2.micro"
     key_name                    = "three-tier-web-asg-kp"
-    security_groups = [aws_autoscaling_group.three-tier-web-asg.id]
+    security_groups = [aws_security_group.three-tier-web-ec2-asg-sg.id]
     user_data =  <<-EOF
         yum update -y
         yum install -y httpd
