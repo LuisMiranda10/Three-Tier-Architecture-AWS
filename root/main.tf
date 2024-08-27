@@ -14,7 +14,7 @@ resource "aws_launch_configuration" "three-tier-web-config" {
     instance_type               = "t2.micro"
     key_name                    = "three-tier-web-asg-kp"
     security_groups = [aws_autoscaling_group.three-tier-web-asg.id]
-    user_data_base64 =  <<-EOF
+    user_data =  <<-EOF
         yum update -y
         yum install -y httpd
         systemctl start httpd
