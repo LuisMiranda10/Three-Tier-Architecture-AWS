@@ -1,7 +1,7 @@
 resource "aws_autoscaling_group" "three-tier-web-asg" {
   name                 = "three-tier-web-asg"
   launch_configuration = aws_launch_configuration.three-tier-web-config.id
-  vpc_zone_identifier  = [module.network.public_subnet_ids[0].id, module.network.public_subnet_ids[1].id]
+  vpc_zone_identifier  = module.network.public_subnet_ids
   min_size             = 2
   max_size             = 3
   desired_capacity     = 2
@@ -10,7 +10,7 @@ resource "aws_autoscaling_group" "three-tier-web-asg" {
 resource "aws_autoscaling_group" "three-tier-app-asg" {
   name                 = "three-tier-app-asg"
   launch_configuration = aws_launch_configuration.three-tier-app-config.id
-  vpc_zone_identifier  = [module.network.private_subnet_ids[0].id, module.network.private_subnet_ids[1].id]
+  vpc_zone_identifier  = module.network.private_subnet_ids
   min_size             = 2
   max_size             = 3
   desired_capacity     = 2
@@ -44,8 +44,7 @@ resource "aws_launch_configuration" "three-tier-app-config" {
   security_groups             = [aws_security_group.three-tier-app-ec2-asg-sg.id]
   user_data                   = <<-EOF
         #!/bin/bash
-
-        sudo yum install mysql -y
+        yum update -y
         EOF
   associate_public_ip_address = false
   lifecycle {

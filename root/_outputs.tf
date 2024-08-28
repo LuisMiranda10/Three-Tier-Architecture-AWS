@@ -17,3 +17,7 @@ output "subsnet-secure-id" {
 output "internet-gateway-id" {
   value = module.network.internet_gateway_id
 }
+
+output "dns_validation-record" {
+  value = module.acm_certificate.dns_validation_records
+}

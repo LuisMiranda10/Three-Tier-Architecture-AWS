@@ -28,11 +28,11 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     max_ttl                = 86400
   }
     
-    price_class = "PriceClass_All"
+    price_class = "PriceClass_100"
 
     restrictions {
         geo_restriction {
-          restriction_type = none
+          restriction_type = "none"
           locations = []
         }
     }
@@ -48,7 +48,7 @@ resource "aws_lb" "three-tier-web-lb" {
     internal = false
     load_balancer_type = "application"
     security_groups = [aws_security_group.three-tier-web-sg-lb-1.id]
-    subnets = [ module.network.public_subnet_ids[0].id, module.network.public_subnet_ids[1].id  ]
+    subnets = module.network.public_subnet_ids
     enable_deletion_protection = true
     tags = {
         Environment = "three-tier-web-lb"
@@ -60,7 +60,7 @@ resource "aws_lb" "three-tier-app-lb" {
     internal = true
     load_balancer_type = "application"
     security_groups = [aws_security_group.three-tier-app-sg-lb-2.id]
-    subnets = [ module.network.private_subnet_ids[0].id, module.network.private_subnet_ids[1].id  ]
+    subnets = module.network.private_subnet_ids
     enable_deletion_protection = true
     tags = {
       Environment = "three-tier-app-alb"

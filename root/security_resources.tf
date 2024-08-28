@@ -1,15 +1,15 @@
 ## web load balancer security group
 resource "aws_security_group" "three-tier-web-sg-lb-1" {
   name        = "three-tier-web-sg"
-  description = "Allow HTTP into Load balancer security group for web tier"
+  description = "Allow HTTPS into Load balancer security group for web tier"
   vpc_id      = module.network.vpc_id
   depends_on  = [module.network.vpc_id]
 
   ingress {
-    from_port       = "0"
-    to_port         = "0"
-    protocol        = "-1"
-    security_groups = ["colocar o cloudfront aqui ainda"]
+    from_port       = "443"
+    to_port         = "443"
+    protocol        = "tcp"
+    prefix_list_ids = ["pl-global-cloudfront-origin"] # lista gerenciada pela AWS de prefixos do CloudFront
   }
   egress {
     from_port   = "0"
@@ -79,12 +79,6 @@ resource "aws_security_group" "three-tier-app-ec2-asg-sg" {
     to_port         = "80"
     protocol        = "tcp"
     security_groups = [aws_security_group.three-tier-app-sg-lb-2.id]
-  }
-  ingress {
-    from_port       = "-1"
-    to_port         = "-1"
-    protocol        = "icmp"
-    security_groups = [aws_security_group.three-tier-web-ec2-asg-sg]
   }
   egress {
     from_port   = "0"

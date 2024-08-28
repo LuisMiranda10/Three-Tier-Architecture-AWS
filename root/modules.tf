@@ -15,7 +15,6 @@ module "acm_certificate" {
 
   domain_names             = ["example.com", "*.example.com"]
   validation_method        = "DNS"
-  create_validation_record = false
 }
 
 provider "aws" {
