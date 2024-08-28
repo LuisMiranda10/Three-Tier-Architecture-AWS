@@ -10,6 +10,14 @@ module "network" {
   vpc_endpoint_dynamodb_gateway = false
 }
 
+module "acm_certificate" {
+  source = "git::https://github.com/DNXLabs/terraform-aws-acm-certificate?ref=0.2.2"
+
+  domain_names             = ["example.com", "*.example.com"]
+  validation_method        = "DNS"
+  create_validation_record = false
+}
+
 provider "aws" {
   region = "sa-east-1"
 }
